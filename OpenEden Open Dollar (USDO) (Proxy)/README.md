@@ -4,7 +4,17 @@
 
 ---
 
-### 一、总体定位
+### 关联与跳转
+
+- **USDO 合约说明**：详见 [USDO/README.md](../USDO/README.md)
+- **cUSDO 合约说明**：详见 [cUSDO/README.md](../cUSDO/README.md)
+
+- **三者关系简述**：
+  - **Proxy**：提供透明代理/Beacon/UUPS 等升级与所有权管理基建；
+  - **USDO**：可由 Proxy 承载的核心代币逻辑，基于 UUPS/AccessControl/Pausable/Permit；
+  - **cUSDO**：USDO 的 ERC-4626 包装，暂停/封禁与 USDO 联动，亦可由 Proxy 承载部署。
+
+### 一、合约定位
 - 该目录主要包含 OpenZeppelin 标准库的非升级版组件，用于部署/管理升级代理（Transparent Proxy、Beacon Proxy、ERC1967）、所有权控制（Ownable）、以及底层工具（Address、StorageSlot、Context）。
 - 从目录快照看，未包含具体的 `USDO` 代币实现源码，而是提供了与“Open Dollar (USDO)”生态相关的代理与权限基建。可推测 USDO 本体合约（代币/稳定币等）会搭配此处的代理框架进行可升级部署与管理。
 

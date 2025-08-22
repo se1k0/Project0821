@@ -4,6 +4,16 @@
 
 ---
 
+### 关联与跳转
+
+- **USDO 合约说明**：详见 [USDO/README.md](../USDO/README.md)
+- **Proxy 基建说明**：详见 [OpenEden Open Dollar (USDO) (Proxy)/README.md](../OpenEden Open Dollar (USDO) (Proxy)/README.md)
+
+- **三者关系简述**：
+  - **USDO**：核心代币与权限/暂停/封禁/UUPS 升级逻辑实现；
+  - **cUSDO**：`USDO` 的 ERC-4626 金库包装，存入 `USDO` 获得 `cUSDO` 份额，暂停与封禁与 `USDO` 联动；
+  - **Proxy**：提供透明代理/Beacon/UUPS 等可升级部署与所有权管理基建，可承载 `USDO`/`cUSDO` 的生产部署。
+
 ### 一、合约定位
 - **cUSDO 是一个可升级的 ERC-4626 金库（Vault）份额代币**，底层资产为 `USDO`。用户存入 `USDO` 获取 `cUSDO` 份额，赎回时以 `cUSDO` 换回 `USDO`。
 - 合约通过 ERC-4626 的份额-资产换算模型，体现底层资产变动对份额价值的影响（若 `USDO` 在金库中的余额增长，则每份 `cUSDO` 对应的 `USDO` 数量上升）。

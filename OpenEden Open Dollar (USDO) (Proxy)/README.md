@@ -147,12 +147,12 @@
 
 ---
 
-### 九、集成建议与最佳实践
-- 若 `USDO` 作为稳定币/代币实现：
+### 九、集成
+- `USDO` 作为稳定币/代币实现：
   - 使用 `TransparentUpgradeableProxy + ProxyAdmin` 作为默认升级栈；将 `ProxyAdmin` 的 `owner` 设为多签/治理。
   - 实现合约需遵循可升级存储布局规范，保留 `__gap`，并使用 `initialize`/`reinitializer`（如采用升级版合约基类）。
   - 严格区分“实现合约逻辑权限”（如 `AccessControl`/`Ownable`）与“代理升级权限”（`ProxyAdmin`/`Beacon` 的 `owner`）。
-- 若需要同时管理多实例：
+- 同时管理多实例：
   - 采用 `UpgradeableBeacon + BeaconProxy`，统一升级实现，降低运营成本。
 - 运维监控：
   - 定期读取 `implementation`、`admin`、`owner` 状态，审计权限变更；对升级事件进行告警。
@@ -172,15 +172,7 @@ proxyAdmin.upgrade(ITransparentUpgradeableProxy(proxy), newImplementation);
 upgradeableBeacon.upgradeTo(newImplementation);
 ```
 
----
-
-### 十一、总结
-- 该目录提供了围绕 USDO 生态所需的“代理升级 + 所有权控制 + 底层工具”的完整基建，遵循 EIP-1967/1822 等标准；
-- 你可以基于此选择 Transparent 或 Beacon 模式部署 USDO 及其配套合约，配合多签/治理控制升级与管理员权限，从而实现安全、可演进的协议架构。
-
----
-
-### 十二、目录结构与依赖清单（含用途与调用位置）
+### 十一、目录结构与依赖清单（含用途与调用位置）
 
 #### 目录结构（节选）
 ```text
@@ -249,7 +241,7 @@ OpenEden Open Dollar (USDO)/
 
 ---
 
-### 十三、本项目自研合约与脚本（本目录）
+### 十二、自研合约与脚本
 
 - 说明：
   - 本目录仅包含 OpenZeppelin 标准开源合约（代理/所有权/工具等），用于为 USDO 生态提供可升级与权限基建；
@@ -258,7 +250,7 @@ OpenEden Open Dollar (USDO)/
 
 ---
 
-### 十四、主网部署结构（Etherscan 导读）
+### 十三、主网部署结构
 
 - **典型结构（与你仓库中的基建一致）**
   - 代理：`TransparentUpgradeableProxy`（代理地址 = Token 地址）
@@ -280,14 +272,14 @@ OpenEden Open Dollar (USDO)/
 
 ---
 
-### 十五、为何代理地址即 Token 地址
+### 十四、为何代理地址即 Token 地址
 
 - 用户/钱包调用的 ERC20 接口（`totalSupply`、`balanceOf`、`transfer` 等）都由代理转发到实现合约执行；
 - 因此浏览器/钱包会把“代理地址”识别为 Token 合约地址，交易与事件也记在代理地址下。
 
 ---
 
-### 十六、复刻部署步骤（Transparent 模式）
+### 十五、复刻部署步骤（Transparent 模式）
 
 1) 部署实现合约（USDOImplementation）
    - 实现 `initialize(name,symbol,...)`（必要状态一次性初始化）；
@@ -317,12 +309,3 @@ OpenEden Open Dollar (USDO)/
   - Beacon：`UpgradeableBeacon + BeaconProxy`，多实例共享实现，由 Beacon 统一升级。
 
 ---
-
-### 十七、待补充（主网地址就绪后）
-
-- 当提供 USDO 主网地址后，将在本节补充：
-  - Implementation/Admin 实际地址与 Etherscan 链接；
-  - 代理部署交易的初始化 calldata 解码；
-  - 首次 `Upgraded/AdminChanged` 事件记录；
-  - 初始铸造/发行相关交易与持币分布快照。
-
